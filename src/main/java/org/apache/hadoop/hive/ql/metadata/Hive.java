@@ -3034,33 +3034,22 @@ public class Hive {
     @Unstable
     public IMetaStoreClient getMSC() throws MetaException {
 
+        long a = System.currentTimeMillis();
+        //CHANGED
+        //if (metaStoreClient == null) {
         try {
-            if(metaStoreClient == null || !owner.equals(UserGroupInformation.getCurrentUser())){
-                owner = UserGroupInformation.getCurrentUser();
-                printInfo("Creating new metastore client ");
-                metaStoreClient = createMetaStoreClient();
-            }else {
-                printInfo("Using existing metastore client");
-            }
-            metaStoreClient = createMetaStoreClient();
-        } catch (IOException e) {
+            //CHANGED
+            printInfo("getMSC");
+            owner = UserGroupInformation.getCurrentUser();
+        } catch(IOException e) {
             String msg = "Error getting current user: " + e.getMessage();
             LOG.error(msg, e);
             throw new MetaException(msg + "\n" + StringUtils.stringifyException(e));
         }
-//
-//
-//        if (metaStoreClient == null) {
-//            try {
-//                owner = UserGroupInformation.getCurrentUser();
-//            } catch(IOException e) {
-//                String msg = "Error getting current user: " + e.getMessage();
-//                LOG.error(msg, e);
-//                throw new MetaException(msg + "\n" + StringUtils.stringifyException(e));
-//            }
-//            metaStoreClient = createMetaStoreClient();
-//        }
-
+        metaStoreClient = createMetaStoreClient();
+        //}
+        //CHANGED
+        printInfo("getMSC time taken " + (System.currentTimeMillis() - a));
         return metaStoreClient;
     }
 
